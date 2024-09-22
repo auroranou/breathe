@@ -5,20 +5,6 @@
   font-size: 16px;
 }
 
-@media (prefers-color-scheme: light) {
-  body {
-    background-color: #eee;
-    color: black;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: black;
-    color: white;
-  }
-}
-
 main {
   display: flex;
   flex-flow: column nowrap;
@@ -59,4 +45,22 @@ main {
   display: flex;
   flex-grow: 1;
   justify-content: center;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #eee;
+    color: black;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: black;
+    color: white;
+  }
+
+  .input {
+    border-color: white;
+  }
 }
