@@ -1,6 +1,7 @@
 import "./reset.css";
 import "./style.css";
 
+import * as Blobs from "./themes/blobs";
 import * as SimpleSquare from "./themes/simple-square";
 import type { BreatheConfig } from "./types";
 
@@ -53,6 +54,9 @@ function onThemeChange() {
   switch (theme) {
     case "simple-square":
       SimpleSquare.draw(config);
+      break;
+    case "blobs":
+      Blobs.draw(config);
       break;
     default:
   }
