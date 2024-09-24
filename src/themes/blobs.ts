@@ -5,8 +5,17 @@ import type { BreatheConfig } from "../types";
 
 let time = 0;
 const clock = new THREE.Clock();
-const resolution = 56;
-const numBlobs = 8;
+const numBlobs = 12;
+const resolution = 80;
+
+const colors = [
+  new THREE.Color(0xff69b4), // hotpink
+  new THREE.Color(0xe6e6fa), // lavender
+  new THREE.Color(0x87ceeb), // skyblue
+  new THREE.Color(0x7fffd4), // aquamarine
+  new THREE.Color(0x98fb98), // palegreen
+  new THREE.Color(0xffa07a), // lightsalmon
+];
 
 export function draw({ container }: BreatheConfig) {
   const camera = new THREE.PerspectiveCamera(
@@ -18,23 +27,20 @@ export function draw({ container }: BreatheConfig) {
   const scene = new THREE.Scene();
 
   const light = new THREE.DirectionalLight(0xffffff, 3);
-  light.position.set(0.5, 0.5, 1);
+  light.position.set(0, 0, 1);
   scene.add(light);
 
-  const pointLight = new THREE.PointLight(0xff7c00, 3, 0, 0);
-  pointLight.position.set(0, 0, 100);
-  scene.add(pointLight);
-
-  const ambientLight = new THREE.AmbientLight(0x323232, 3);
+  const ambientLight = new THREE.AmbientLight(0xdedede, 3);
   scene.add(ambientLight);
 
   const material = new THREE.MeshPhongMaterial({
-    specular: 0xc1c1c1,
     shininess: 250,
+    vertexColors: true,
   });
 
   const effect = new MarchingCubes(resolution, material, false, true, 20000);
-  effect.scale.set(50, 50, 50);
+  effect.scale.set(100, 100, 100);
+  effect.isolation = 30;
   scene.add(effect);
 
   const renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -64,19 +70,17 @@ function onWindowResize(
 function updateCubes(object: MarchingCubes, time: number) {
   object.reset();
 
-  const subtract = 12;
-  const strength = 1.2 / ((Math.sqrt(numBlobs) - 1) / 4 + 1);
-
   for (let i = 0; i < numBlobs; i++) {
+    const subtract = numBlobs;
+    const strength = 1.6 / Math.sqrt(numBlobs);
+
     const x =
-      Math.sin(i + 1.26 * time * (1.03 + 0.5 * Math.cos(0.21 * i))) * 0.27 +
+      Math.sin(i + 1.26 * time * (1.03 + 0.5 * Math.cos(0.21 * i))) * 0.16 +
       0.5;
     const y =
-      Math.abs(Math.cos(i + 1.12 * time * Math.cos(1.22 + 0.1424 * i))) * 0.77; // dip into the floor
-    const z =
-      Math.cos(i + 1.32 * time * 0.1 * Math.sin(0.92 + 0.53 * i)) * 0.27 + 0.5;
+      Math.cos(i + 1.32 * time * 0.1 * Math.sin(0.92 + 0.53 * i)) * 0.12 + 0.5;
 
-    object.addBall(x, y, z, strength, subtract);
+    object.addBall(x, y, y, strength, subtract, colors[i % 6]);
   }
 
   object.update();
